@@ -5,6 +5,7 @@ const path = require("path");
 const dbPath = path.join(__dirname, "covid19India.db");
 const sqlite3 = require("sqlite3");
 let db = null;
+app.use(express.json());
 const convertCase = (eachElement) => {
   return {
     stateId: eachElement.state_id,
@@ -28,6 +29,14 @@ const initiliazeDbAndServer = async () => {
         convertCase(eachElement)
       );
       response.send(result1);
+    });
+    app.get("/states/:stateId", async (request, response) => {
+      const { stateId } = request.params;
+      const query2 = `select * from state where
+           state_id=${stateId};`;
+      const dbResponse2 = await db.get(query2);
+      const result2 = convertCase(dbResponse2);
+      response.send(result2);
     });
   } catch (e) {
     console.log("Db Error");
