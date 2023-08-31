@@ -38,6 +38,25 @@ const initiliazeDbAndServer = async () => {
       const result2 = convertCase(dbResponse2);
       response.send(result2);
     });
+    app.post("/districts/", async (request, response) => {
+      const districtData = request.body;
+      const {
+        districtName,
+        stateId,
+        cases,
+        cured,
+        active,
+        deaths,
+      } = districtData;
+      const query3 = `update district set
+        district_name='${districtName}',
+        state_id=${stateId},
+        cases=${cases},
+        active=${active},
+        deaths=${deaths};`;
+      const dbResponse3 = await db.run(query3);
+      response.send("District Successfully Added");
+    });
   } catch (e) {
     console.log("Db Error");
   }
