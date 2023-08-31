@@ -59,12 +59,13 @@ const initiliazeDbAndServer = async () => {
         active,
         deaths,
       } = districtData;
-      const query3 = `update district set
+      const query3 = `insert into district( district_name, state_id, cases,
+        active,deaths)values(
         district_name='${districtName}',
         state_id=${stateId},
         cases=${cases},
         active=${active},
-        deaths=${deaths};`;
+        deaths=${deaths});`;
       const dbResponse3 = await db.run(query3);
       response.send("District Successfully Added");
     });
@@ -82,6 +83,16 @@ const initiliazeDbAndServer = async () => {
          where district_id=${districtId};`;
       const dbResponse5 = await db.get(query5);
       response.send("District Removed");
+    });
+    app.post("/districts/:districtId/", async (request, response) => {
+      const query6 = `update district set
+        district_name='${districtName}',
+        state_id=${stateId},
+        cases=${cases},
+        active=${active},
+        deaths=${deaths};`;
+      const dbResponse6 = await db.run(query6);
+      response.send("District Details Updated");
     });
   } catch (e) {
     console.log("Db Error");
