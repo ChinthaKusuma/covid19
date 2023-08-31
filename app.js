@@ -13,6 +13,17 @@ const convertCase = (eachElement) => {
     population: eachElement.population,
   };
 };
+const convertDistrictCase = (dbResponse4) => {
+  return {
+    districtId: dbResponse4.district_id,
+    districtName: dbResponse4.district_name,
+    stateId: dbResponse4.state_id,
+    cases: dbResponse4.cases,
+    cured: dbResponse4.cured,
+    active: dbResponse4.active,
+    deaths: dbResponse4.deaths,
+  };
+};
 const initiliazeDbAndServer = async () => {
   try {
     db = await open({
@@ -56,6 +67,14 @@ const initiliazeDbAndServer = async () => {
         deaths=${deaths};`;
       const dbResponse3 = await db.run(query3);
       response.send("District Successfully Added");
+    });
+    app.get("/districts/:districtId/", async (request, response) => {
+      const { districtId } = request.params;
+      const query4 = `select * from district
+         where district_id=${districtId};`;
+      const dbResponse4 = await db.get(query4);
+      const result4 = convertDistrictCase(dbResponse4);
+      response.send(result4);
     });
   } catch (e) {
     console.log("Db Error");
