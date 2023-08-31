@@ -76,6 +76,13 @@ const initiliazeDbAndServer = async () => {
       const result4 = convertDistrictCase(dbResponse4);
       response.send(result4);
     });
+    app.delete("/districts/:districtId/", async (request, response) => {
+      const { districtId } = request.params;
+      const query5 = `delete from district
+         where district_id=${districtId};`;
+      const dbResponse5 = await db.get(query5);
+      response.send("District Removed");
+    });
   } catch (e) {
     console.log("Db Error");
   }
